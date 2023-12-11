@@ -1,4 +1,4 @@
-import * as cpn from "./components.js";
+import * as cpn from "../components.js";
 
 
 function collision(components, obj1, obj2) {

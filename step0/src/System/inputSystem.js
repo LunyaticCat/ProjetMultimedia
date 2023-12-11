@@ -1,4 +1,4 @@
-import * as cpn from "./components.js";
+import * as cpn from "../components.js";
 
 let mPrevTime;
 let mLagTime;

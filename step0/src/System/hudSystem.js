@@ -1,4 +1,4 @@
-import * as cpn from "./components.js";
+import * as cpn from "../components.js";
 
 const hudSystem = (entities, components, root) => {
     root.innerHTML = '';

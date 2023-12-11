@@ -1,14 +1,14 @@
 
-import * as cssRenderSystem from "./renderSystemCSS.js";
-import * as renderSystem from "./renderSystem.js";
+import * as cssRenderSystem from "./Rendering/renderSystemCSS.js";
+import * as renderSystem from "./Rendering/renderSystem.js";
 
 
 import * as components from "./components.js";
-import * as physicsSystem from "./physicsSystem.js";
-import * as collisionSystem from "./collisionSystem.js";
-import * as inputSystem from "./inputSystem.js";
-import * as hudSystem from "./hudSystem.js";
-import * as gameoverSystem from "./gameoverSystem.js";
+import * as physicsSystem from "./System/physicsSystem.js";
+import * as collisionSystem from "./System/collisionSystem.js";
+import * as inputSystem from "./System/inputSystem.js";
+import * as hudSystem from "./System/hudSystem.js";
+import * as gameoverSystem from "./System/gameoverSystem.js";
 
 function generateUUID() { // Public Domain/MIT
     var d = new Date().getTime();//Timestamp

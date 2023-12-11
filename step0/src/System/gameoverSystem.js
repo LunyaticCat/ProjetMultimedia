@@ -1,4 +1,4 @@
-import * as cpn from "./components.js";
+import * as cpn from "../components.js";
 
 const gameoverSystem = (entities, components, ecs,max) => {
     for (const stateEntity of Object.getOwnPropertySymbols(components[cpn.GameStateComponent.name])) {
