@@ -12,10 +12,9 @@ function compileShader(source, type) {
 
 
 /**
- * 
  * @param {*} gl WebGl
  */
-function setupShaders(gl){
+function setupShaders(gl, program){
 
     fetch('../Shaders/vertexShader.glsl')
         .then(response => response.text())
@@ -23,13 +22,12 @@ function setupShaders(gl){
             fetch('../Shaders/fragmentShader.glsl')
                 .then(response => response.text())
                 .then((fragmentShaderSource) => {
-                    //TODO : Link vertexShader and fragmentShader to the shader sources
+                    //Link vertexShader and fragmentShader to the shader sources
                     let vertexShader = compileShader(vertexShaderSource, gl.VERTEX_SHADER);
                     let fragmentShader = compileShader(fragmentShaderSource, gl.FRAGMENT_SHADER);
                     //------
 
                     // create and attach the shaders with gl
-                    program = gl.createProgram();
                     gl.attachShader(program, vertexShader);
                     gl.attachShader(program, fragmentShader);
                     gl.linkProgram(program);
