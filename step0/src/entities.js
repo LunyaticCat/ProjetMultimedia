@@ -39,7 +39,7 @@ function Ball(x, y, w, h, dx = 0, dy = 0) {
  * @param {int} h - the entity height.
  * @return gameObject
  */
-function Raquette(x, y, w, h) {
+function Paddle(x, y, w, h) {
     const gameObj1 = engine.ecs.createEntity();
     engine.ecs.addComponent(gameObj1, engine.components.RaquetteTag())
     engine.ecs.addComponent(gameObj1, engine.components.PhysicsTag());
@@ -63,7 +63,7 @@ function Raquette(x, y, w, h) {
  * @param {int} h - the entity height.
  * @return gameObject
  */
-function Brique(x, y, w, h) {
+function Brick(x, y, w, h) {
     const gameObj1 = engine.ecs.createEntity();
     engine.ecs.addComponent(gameObj1, engine.components.BriqueTag())
     engine.ecs.addComponent(gameObj1, engine.components.PositionComponent(x, y, 0));
@@ -86,7 +86,7 @@ function Brique(x, y, w, h) {
  * @param {int} h - the entity height.
  * @return gameObject
  */
-function Mur(x, y, w, h) {
+function Wall(x, y, w, h) {
     const gameObj1 = engine.ecs.createEntity();
     engine.ecs.addComponent(gameObj1, engine.components.MurTag())
     engine.ecs.addComponent(gameObj1, engine.components.PositionComponent(x, y, 0));
@@ -111,4 +111,4 @@ function GameState() {
 }
 
 
-export { Ball, Raquette, Brique, Mur , GameState}
+export { Ball, Paddle, Brick, Wall , GameState}

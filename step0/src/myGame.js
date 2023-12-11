@@ -7,21 +7,21 @@ import * as cpn from "./components.js";
 //hard coded scene...
 function sceneSetup() {
 
-    const mure01 = entitites.Mur(0, 0, 5, 350);
-    const mure02 = entitites.Mur(345, 0, 5, 350);
-    const mure03 = entitites.Mur(0, 0, 350, 5);
-    const mure04 = entitites.Mur(0, 350, 350, 5);
+    const wall01 = entitites.Wall(0, 0, 5, 350);
+    const wall02 = entitites.Wall(345, 0, 5, 350);
+    const wall03 = entitites.Wall(0, 0, 350, 5);
+    const wall04 = entitites.Wall(0, 350, 350, 5);
 
 
     const ball = entitites.Ball(150, 150, 10, 10, 0.1, 0.05);
-    const raquette = entitites.Raquette(0, 300, 50, 10);
+    const paddle = entitites.Paddle(0, 300, 50, 10);
     let offsetx = 25;
     let offsety = 10;
     let deltax = 70;
     let deltay = 30;
     for (let i = 0; i < 5; i++)
         for (let j = 0; j < 5; j++) {
-            const br = entitites.Brique(offsetx + i * deltax, offsety + j * deltay, 20, 15);
+            const br = entitites.Brick(offsetx + i * deltax, offsety + j * deltay, 20, 15);
         }
 
     
