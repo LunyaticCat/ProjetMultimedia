@@ -89,7 +89,17 @@ let colorLocation;
 let positionBuffer;
 let matrixLocation;
 
-function fillGeometryCoordinates(gl) {
+function fillGeometryCoordinates(gl, entities, components) {
+    for(const entity of entities){
+        if (components.RenderableTag[entity] &&
+            components.GraphicsComponent[entity] &&
+            components.PositionComponent[entity]
+        ) {
+            const position = components.PositionComponent[entity];
+            const grfx = components.GraphicsComponent[entity];
+            let nid = entity.description;
+        }
+    }
     gl.bufferData(
         gl.ARRAY_BUFFER,
         new Float32Array([
@@ -119,7 +129,6 @@ function updateScene() {
     gl.useProgram(program);
     gl.enableVertexAttribArray(positionLocation);
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    fillGeometryCoordinates(gl);
 
     var size = 2;          // 2 elements par iteration
     var type = gl.FLOAT;   // type
@@ -220,23 +229,13 @@ function setupGL() {
 
 const webGLRenderSystem = (entities, components, webGL) => {
     gl = webGL;
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.clearColor(0.0, 0.0, 0.0, 0.20);
     gl.clear(gl.COLOR_BUFFER_BIT);
     program = gl.createProgram();
+
+    fillGeometryCoordinates(gl, entities, components);
+
     setupGL();
-
-    for(const entity of entities){
-        if (components.RenderableTag[entity] &&
-            components.GraphicsComponent[entity] &&
-            components.PositionComponent[entity]
-        ) {
-            const position = components.PositionComponent[entity];
-            const grfx = components.GraphicsComponent[entity];
-            let nid = entity.description;
-            
-        }
-    }
-
     updateScene();
 };
 
