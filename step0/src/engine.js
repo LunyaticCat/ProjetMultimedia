@@ -9,6 +9,7 @@ import * as collisionSystem from "./System/collisionSystem.js";
 import * as inputSystem from "./System/inputSystem.js";
 import * as hudSystem from "./System/hudSystem.js";
 import * as gameoverSystem from "./System/gameoverSystem.js";
+import {webGLRenderSystem} from "./Rendering/renderSystem.js";
 
 function generateUUID() { // Public Domain/MIT
     var d = new Date().getTime();//Timestamp
@@ -149,6 +150,7 @@ function init(htmlCanvasID) {
     initWebGL(htmlCanvasID);
     let canvas = document.getElementById(htmlCanvasID);
     let root = document.createElement("div");
+    let gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
     document.body.appendChild(root);
     
     let rootHUD = document.createElement("div");
@@ -159,8 +161,8 @@ function init(htmlCanvasID) {
     ecs.addSystem(entities => inputSystem.inputSystem(entities, ecs.components));
     ecs.addSystem(entities => physicsSystem.physicsSystem(entities, ecs.components));
     ecs.addSystem(entities => collisionSystem.collisionSystem(entities, ecs.components,ecs));
-    //TODO
-    ecs.addSystem(entities => cssRenderSystem.cssRenderSystem(entities, ecs.components, root));
+
+    ecs.addSystem(entities => renderSystem.webGLRenderSystem(entities, ecs.components, gl));
     //---
     ecs.addSystem(entities => gameoverSystem.gameoverSystem(entities, ecs.components, ecs,25));
     ecs.addSystem(entities => hudSystem.hudSystem(entities, ecs.components,rootHUD));
