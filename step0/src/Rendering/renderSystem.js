@@ -222,9 +222,21 @@ const webGLRenderSystem = (entities, components, webGL) => {
     gl = webGL;
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
-
     program = gl.createProgram();
     setupGL();
+
+    for(const entity of entities){
+        if (components.RenderableTag[entity] &&
+            components.GraphicsComponent[entity] &&
+            components.PositionComponent[entity]
+        ) {
+            const position = components.PositionComponent[entity];
+            const grfx = components.GraphicsComponent[entity];
+            let nid = entity.description;
+            
+        }
+    }
+
     updateScene();
 };
 
