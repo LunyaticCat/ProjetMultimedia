@@ -1,4 +1,8 @@
 
+/**
+ * We define all components as functions. It's not constructor but return objects.
+ */
+
 const PositionComponent = (x, y, z,min_x=0,min_y=0,min_z=0,max_x=300,max_y=300,max_z=10) => ({ name: 'PositionComponent', x, y, z,min_x,min_y,min_z,max_x,max_y,max_z });
 const GraphicsComponent = (shape, shapeInfo) => ({ name: 'GraphicsComponent', shape, shapeInfo });
 const LifeComponent = (maxLife) => ({ name: "LifeComponent", maxLife, life });
