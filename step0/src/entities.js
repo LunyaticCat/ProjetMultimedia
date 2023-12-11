@@ -3,13 +3,17 @@ import * as engine from "./engine.js";
 //Ball : Position,Velocity, BallTag,PhysicsTag, CollisionTag.
 /**
  * The ball entity.
- * @constructor
- * @param {int} x - the x coordinate of the ball.
- * @param {int} y - the y coordinate of the ball.
- * @param {int} w - the width of the ball.
- * @param {int} h - the height of the ball.
- * @param {int} dx - x coordinate of the velocity vector.
- * @param {int} dy - y coordinate of the velocity vector.
+ *
+ * Position
+ * @param {int} x - the x position.
+ * @param {int} y - the y position.
+ *
+ * @param {int} w - the entity width.
+ * @param {int} h - the entity height.
+ * Velocity
+ * @param {int} dx - velocity vector x coordinate.
+ * @param {int} dy - velocity vector y coordinate.
+ * @return gameObject
  */
 function Ball(x, y, w, h, dx = 0, dy = 0) {
     const gameObj1 = engine.ecs.createEntity();
@@ -24,7 +28,17 @@ function Ball(x, y, w, h, dx = 0, dy = 0) {
     return gameObj1;
 }
 
-
+/**
+ * The paddle entity.
+ *
+ * Position
+ * @param {int} x - the x position.
+ * @param {int} y - the y position.
+ *
+ * @param {int} w - the entity width.
+ * @param {int} h - the entity height.
+ * @return gameObject
+ */
 function Raquette(x, y, w, h) {
     const gameObj1 = engine.ecs.createEntity();
     engine.ecs.addComponent(gameObj1, engine.components.RaquetteTag())
@@ -38,6 +52,17 @@ function Raquette(x, y, w, h) {
 
 }
 
+/**
+ * The brick entity.
+ *
+ * Position
+ * @param {int} x - the x position.
+ * @param {int} y - the y position.
+ *
+ * @param {int} w - the entity width.
+ * @param {int} h - the entity height.
+ * @return gameObject
+ */
 function Brique(x, y, w, h) {
     const gameObj1 = engine.ecs.createEntity();
     engine.ecs.addComponent(gameObj1, engine.components.BriqueTag())
@@ -50,6 +75,17 @@ function Brique(x, y, w, h) {
 
 }
 
+/**
+ * The wall entity.
+ *
+ * Position
+ * @param {int} x - the x position.
+ * @param {int} y - the y position.
+ *
+ * @param {int} w - the entity width.
+ * @param {int} h - the entity height.
+ * @return gameObject
+ */
 function Mur(x, y, w, h) {
     const gameObj1 = engine.ecs.createEntity();
     engine.ecs.addComponent(gameObj1, engine.components.MurTag())
@@ -62,7 +98,11 @@ function Mur(x, y, w, h) {
 
 }
 
-
+/**
+ * The paddle entity.
+ *
+ * @return gameObject
+ */
 function GameState() {
     const gameObj1 = engine.ecs.createEntity();
     engine.ecs.addComponent(gameObj1, engine.components.GameStateComponent());
