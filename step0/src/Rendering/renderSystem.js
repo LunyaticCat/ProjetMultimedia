@@ -84,6 +84,7 @@ let color;
 
 
 let positionLocation;
+let colorLocation;
 //var resolutionLocation;
 let positionBuffer;
 let matrixLocation;
@@ -138,9 +139,6 @@ function updateScene() {
     let angleInRadians = -rotationAngle * Math.PI / 180 ;
     let rotationMatrix = m3.rotation(angleInRadians);
     let scaleMatrix = m3.scaling(scale[0], scale[1]);
-
-    // TODO: calculer la matrice de projection avec m3.projection
-    let projectionMatrix = m3.projection(canvas.width, canvas.height);
     //----
 
     // Multiply the matrices.
@@ -149,8 +147,6 @@ function updateScene() {
     let matrix = m3.identity();
     //New: on commence par multiplier la matrice de project
     // elle sera donc la dernière transformation à se réaliser
-    matrix = m3.multiply(matrix, projectionMatrix);
-    //
     matrix = m3.multiply(matrix, translationMatrix);
     matrix = m3.multiply(matrix, rotationMatrix);
     matrix = m3.multiply(matrix, scaleMatrix);
@@ -168,14 +164,68 @@ function updateScene() {
     gl.drawArrays(primitiveType, offset, count);
 }
 
-const webGLRenderSystem = (entities, components, gl) => {
+function setupGL() {
+    // Shader sources
+    let vertexShaderSource = `
+                attribute vec2 a_position;
+                uniform mat3 u_matrix;
+                void main() {
+                // Transformation & Project
+                    vec2 position = (u_matrix * vec3(a_position, 1)).xy;
+                    gl_Position = vec4(position, 0, 1);
+                //---
+                }
+            `;
+
+    let fragmentShaderSource = `
+                precision mediump float;
+                uniform vec4 u_color;
+                void main() {
+                    gl_FragColor = u_color;
+                }
+            `;
+
+    // Compile shader
+    function compileShader(source, type) {
+        let shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+            console.error('Erreur de compilation du shader: ' + gl.getShaderInfoLog(shader));
+            gl.deleteShader(shader);
+            return null;
+        }
+        return shader;
+    }
+
+    let vertexShader = compileShader(vertexShaderSource, gl.VERTEX_SHADER);
+    let fragmentShader = compileShader(fragmentShaderSource, gl.FRAGMENT_SHADER);
+
+    // Link shaders into a program
+    program = gl.createProgram();
+    gl.attachShader(program, vertexShader);
+    gl.attachShader(program, fragmentShader);
+    gl.linkProgram(program);
+    //
+    positionLocation = gl.getAttribLocation(program, "a_position");
+    colorLocation = gl.getUniformLocation(program, "u_color");
+
+    matrixLocation = gl.getUniformLocation(program, "u_matrix");
+
+    color = [Math.random(), Math.random(), Math.random(), 1];
+
+    positionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+}
+
+const webGLRenderSystem = (entities, components, webGL) => {
+    gl = webGL;
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    const program = gl.createProgram();
-
+    program = gl.createProgram();
+    setupGL();
     updateScene();
-    setupShaders(gl, program);
 };
 
 export {webGLRenderSystem}
