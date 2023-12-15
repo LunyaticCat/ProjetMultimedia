@@ -89,33 +89,88 @@ let colorLocation;
 let positionBuffer;
 let matrixLocation;
 
-function fillGeometryCoordinates(gl, entities, components) {
-    for(const entity of entities){
-        if (components.RenderableTag[entity] &&
-            components.GraphicsComponent[entity] &&
-            components.PositionComponent[entity]
-        ) {
-            const position = components.PositionComponent[entity];
-            const grfx = components.GraphicsComponent[entity];
-            let nid = entity.description;
+function fillGeometryCoordinates(gl) {
+    let depth = 10;
+    //TODO
+    function sideRectangle(p1, p2, direction) {
+        let r = [];
+
+        if (direction) {
+            r = [
+                p2[0], p2[1], p2[2],
+                p1[0], p1[1], p1[2],
+                p1[0], p1[1], p1[2] + depth,
+
+                p1[0], p1[1], p1[2] + depth,
+                p2[0], p2[1], p2[2] + depth,
+                p2[0], p2[1], p2[2],
+
+            ];
         }
+        else {
+            r = [
+                p2[0], p2[1], p2[2],
+                p1[0], p1[1], p1[2] + depth,
+                p1[0], p1[1], p1[2],
+
+                p1[0], p1[1], p1[2] + depth,
+                p2[0], p2[1], p2[2],
+                p2[0], p2[1], p2[2] + depth,
+
+            ];
+
+        }
+        return r;
     }
+    //TODO
+    function getRectanglePoints(x, y, z, w, h, direction) {
+        let r = [];
+        if (direction) {
+            r = [
+                x, y, z,
+                x, y + h, z,
+                x + w, y, z,
+                x + w, y, z,
+                x, y + h, z,
+                x + w, y + h, z,
+            ]
+
+        } else {
+            r = [
+                x, y, z,
+                x + w, y, z,
+                x, y + h, z,
+                x + w, y, z,
+                x + w, y + h, z,
+                x, y + h, z,
+            ]
+
+        }
+
+        return r;
+    }
+
+
     gl.bufferData(
         gl.ARRAY_BUFFER,
         new Float32Array([
-            0, 0,
-            0, 10,
-            50, 0,
-            0, 10,
-            50, 0,
-            50, 10,
-            20, 10,
-            30, 10,
-            20, 10 + 40,
-            20 + 10, 10,
-            20, 10 + 40,
-            20 + 10, 10 + 40
+            ...getRectanglePoints(0, 0, 0, 50, 10, true),
+            ...getRectanglePoints(20, 10, 0, 10, 40, true),
+            ...getRectanglePoints(0, 0, depth, 50, 10, false),
+            ...getRectanglePoints(20, 10, depth, 10, 40, false),
 
+            ...sideRectangle([0, 0, 0], [0, 10, 0], true),
+            ...sideRectangle([50, 0, 0], [50, 10, 0], false),
+            ...sideRectangle([20, 10, 0], [20, 10 + 40, 0], true),
+            ...sideRectangle([20 + 10, 10, 0], [20 + 10, 10 + 40, 0], false),
+
+            ...sideRectangle([0, 0, 0], [50, 0, 0], false),
+
+            ...sideRectangle([0, 10, 0], [20, 10, 0], true),
+            ...sideRectangle([30, 10, 0], [50, 10, 0], true),
+
+            //...sideRectangle([20, 10, 0], [30, 10, 0], false),
+            ...sideRectangle([20, 50, 0], [30, 50, 0], true),
 
 
         ]),
