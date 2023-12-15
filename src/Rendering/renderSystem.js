@@ -90,6 +90,25 @@ let positionBuffer;
 let matrixLocation;
 
 function fillGeometryCoordinates(gl, entities, components) {
+    //Array test est le L des tp, ajouté ici pour effectuer des tests
+    const arrayTest = new Float32Array([
+        0, 0,
+        0, 10,
+        50, 0,
+        0, 10,
+        50, 0,
+        50, 10,
+        20, 10,
+        30, 10,
+        20, 10 + 40,
+        20 + 10, 10,
+        20, 10 + 40,
+        20 + 10, 10 + 40
+
+    ])
+
+    const pointsList = [];
+    let index = 0;
     for(const entity of entities){
         if (components.RenderableTag[entity] &&
             components.GraphicsComponent[entity] &&
@@ -98,27 +117,16 @@ function fillGeometryCoordinates(gl, entities, components) {
             const position = components.PositionComponent[entity];
             const grfx = components.GraphicsComponent[entity];
             let nid = entity.description;
+            pointsList[index] = position.min_x;
+            pointsList[index+1] = position.min_y;
+            pointsList[index+2] = position.max_x;
+            pointsList[index+3] = position.max_y;
+            index+=4;
         }
     }
     gl.bufferData(
         gl.ARRAY_BUFFER,
-        new Float32Array([
-            0, 0,
-            0, 10,
-            50, 0,
-            0, 10,
-            50, 0,
-            50, 10,
-            20, 10,
-            30, 10,
-            20, 10 + 40,
-            20 + 10, 10,
-            20, 10 + 40,
-            20 + 10, 10 + 40
-
-
-
-        ]),
+        pointsList,
         gl.STATIC_DRAW);
 }
 
