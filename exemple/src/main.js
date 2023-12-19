@@ -160,11 +160,9 @@ function updateScene() {
     let angleInRadians = -rotationAngle * Math.PI / 180 ;
     let rotationMatrix = m3.rotation(angleInRadians);
     let scaleMatrix = m3.scaling(scale[0], scale[1]);
-    
-    // TODO: calculer la matrice de projection avec m3.projection
     let projectionMatrix = m3.projection(canvas.width, canvas.height);
     //----
-    
+
     // Multiply the matrices.
 
     //NEW
@@ -257,6 +255,3 @@ function main() {
 }
 
 main();
-
-
-

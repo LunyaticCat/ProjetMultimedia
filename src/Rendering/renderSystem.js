@@ -1,3 +1,5 @@
+let stepper = 10;
+let stepperColor;
 const m3 = {
     identity: function () {
         return [
@@ -25,12 +27,21 @@ const webGLRenderSystem = (entities, components, gl) => {
 };
 
 function colorToRGB(color){
-    const r = parseInt(color.slice(1, 3), 16);
-    const g = parseInt(color.slice(3, 5), 16);
-    const b = parseInt(color.slice(5, 7), 16);
+    if(stepper >= 10){
+        stepper = 0;
+        stepperColor = [Math.random(), Math.random(), Math.random(), 1];
+    }
+    if (color === "random") {
+        stepper++;
+        return stepperColor;
+    }
+
+    const r = parseInt(color.slice(1, 3), 16)/255;
+    const g = parseInt(color.slice(3, 5), 16)/255;
+    const b = parseInt(color.slice(5, 7), 16)/255;
 
     // return {r, g, b}
-    return [r,g,b, 1.0];
+    return [ r, g, b, 1 ];
 }
 
 function drawRectangle(gl, x, y, width, height, color, shaderProgram) {
@@ -61,8 +72,8 @@ function drawRectangle(gl, x, y, width, height, color, shaderProgram) {
 
     gl.uniformMatrix3fv(matrixLocation, false, matrix);
 
-    gl.uniform4f(colorLocation, rgbColor[0], rgbColor[1], rgbColor[2], rgbColor[3]);
     gl.vertexAttribPointer(coord, 2, gl.FLOAT, false, 0, 0);
+    gl.uniform4f(colorLocation, rgbColor[0], rgbColor[1], rgbColor[2], rgbColor[3]);
 
     gl.enableVertexAttribArray(coord);
     gl.drawArrays(gl.TRIANGLES, 0, 6);

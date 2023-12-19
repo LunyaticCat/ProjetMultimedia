@@ -22,7 +22,7 @@ function Ball(x, y, w, h, dx = 0, dy = 0) {
     engine.ecs.addComponent(gameObj1, engine.components.PositionComponent(x, y, 1));
     engine.ecs.addComponent(gameObj1, engine.components.VelocityComponent(dx, dy));
     engine.ecs.addComponent(gameObj1, engine.components.RenderableTag());
-    engine.ecs.addComponent(gameObj1, engine.components.GraphicsComponent("rectangle", { w: w, h: h, color: 'red' }));
+    engine.ecs.addComponent(gameObj1, engine.components.GraphicsComponent("rectangle", { w: w, h: h, color: 'random' }));
     engine.ecs.addComponent(gameObj1, engine.components.CollisionTag());
     engine.ecs.addComponent(gameObj1, engine.components.CollisionBoxComponent(w*.9, h*.9));
     return gameObj1;
@@ -45,7 +45,7 @@ function Paddle(x, y, w, h) {
     engine.ecs.addComponent(gameObj1, engine.components.PhysicsTag());
     engine.ecs.addComponent(gameObj1, engine.components.PositionComponent(x, y, 0));
     engine.ecs.addComponent(gameObj1, engine.components.RenderableTag());
-    engine.ecs.addComponent(gameObj1, engine.components.GraphicsComponent("rectangle", { w: w, h: h, color: 'blue' }));
+    engine.ecs.addComponent(gameObj1, engine.components.GraphicsComponent("rectangle", { w: w, h: h, color: '#834141' }));
     engine.ecs.addComponent(gameObj1, engine.components.CollisionTag());
     engine.ecs.addComponent(gameObj1, engine.components.CollisionBoxComponent(w, h));
     return gameObj1;
@@ -68,7 +68,7 @@ function Brick(x, y, w, h) {
     engine.ecs.addComponent(gameObj1, engine.components.BriqueTag())
     engine.ecs.addComponent(gameObj1, engine.components.PositionComponent(x, y, 0));
     engine.ecs.addComponent(gameObj1, engine.components.RenderableTag());
-    engine.ecs.addComponent(gameObj1, engine.components.GraphicsComponent("rectangle", { w: w, h: h, color: 'orange' }));
+    engine.ecs.addComponent(gameObj1, engine.components.GraphicsComponent("rectangle", { w: w, h: h, color: '#5e1f7e' }));
     engine.ecs.addComponent(gameObj1, engine.components.CollisionTag());
     engine.ecs.addComponent(gameObj1, engine.components.CollisionBoxComponent(w, h));
     return gameObj1;
@@ -91,7 +91,7 @@ function Wall(x, y, w, h) {
     engine.ecs.addComponent(gameObj1, engine.components.MurTag())
     engine.ecs.addComponent(gameObj1, engine.components.PositionComponent(x, y, 0));
     engine.ecs.addComponent(gameObj1, engine.components.RenderableTag());
-    engine.ecs.addComponent(gameObj1, engine.components.GraphicsComponent("rectangle", { w: w, h: h, color: '#E1ABAE' }));
+    engine.ecs.addComponent(gameObj1, engine.components.GraphicsComponent("rectangle", { w: w, h: h, color: '#4b0c39' }));
     engine.ecs.addComponent(gameObj1, engine.components.CollisionTag());
     engine.ecs.addComponent(gameObj1, engine.components.CollisionBoxComponent(w, h));
     return gameObj1;
