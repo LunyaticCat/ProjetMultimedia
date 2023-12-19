@@ -68,6 +68,7 @@ function drawRectangle(gl, x, y, width, height, color, shaderProgram) {
     const colorLocation = gl.getUniformLocation(shaderProgram, "u_color");
     let rgbColor = colorToRGB(color);
 
+    //TODO ajouter deformations ici
     let matrix = m3.identity();
 
     gl.uniformMatrix3fv(matrixLocation, false, matrix);
