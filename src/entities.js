@@ -76,17 +76,14 @@ function Brick(x, y, w, h) {
 }
 
 /**
- * The wall entity.
- *
- * Position
- * @param {int} x - the x position.
+ * The wall entity.blue
  * @param {int} y - the y position.
  *
  * @param {int} w - the entity width.
  * @param {int} h - the entity height.
  * @return gameObject
  */
-function Wall(x, y, w, h) {
+function Wall(x, y, w, h, defeatSide = false) {
     const gameObj1 = engine.ecs.createEntity();
     engine.ecs.addComponent(gameObj1, engine.components.MurTag())
     engine.ecs.addComponent(gameObj1, engine.components.PositionComponent(x, y, 0));
@@ -94,6 +91,7 @@ function Wall(x, y, w, h) {
     engine.ecs.addComponent(gameObj1, engine.components.GraphicsComponent("rectangle", { w: w, h: h, color: '#4b0c39' }));
     engine.ecs.addComponent(gameObj1, engine.components.CollisionTag());
     engine.ecs.addComponent(gameObj1, engine.components.CollisionBoxComponent(w, h));
+    engine.ecs.addComponent(gameObj1, engine.components.DyingSideComponent(defeatSide));
     return gameObj1;
 
 }

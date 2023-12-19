@@ -10,7 +10,7 @@ function sceneSetup() {
     const wall01 = entitites.Wall(0, 0, 5, 350);
     const wall02 = entitites.Wall(345, 0, 5, 350);
     const wall03 = entitites.Wall(0, 0, 350, 5);
-    const wall04 = entitites.Wall(0, 350, 350, 5);
+    const wall04 = entitites.Wall(0, 350, 350, 5, true);
 
 
     const ball = entitites.Ball(150, 150, 10, 10, 0.1, 0.05);

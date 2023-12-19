@@ -51,6 +51,11 @@ const collisionSystem = (entities, components,ecs) => {
                             ecs.removeEntity(obj);
                             ecs.eventEmitter.emit('hit');
                         }
+                        if(components.DyingSideComponent[obj] && components.DyingSideComponent[obj].isHitable){
+                    
+                            ecs.eventEmitter.emit('gameover')
+                            
+                        }
                         
                     }
                 }
