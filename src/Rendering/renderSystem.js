@@ -1,297 +1,108 @@
+function setupGL(gl)
+{
+    const vertexShaderCode = `
+        attribute vec2 coordinates;
+        void main(void)
+        {
+            gl_Position = vec4(coordinates, 0.0, 1.0);
+        }`;
 
+    const vertexShader = gl.createShader(gl.VERTEX_SHADER);
+    gl.shaderSource(vertexShader, vertexShaderCode);
+    gl.compileShader(vertexShader);
 
-let m3 = {
-    identity: function() {
-        return [
-            1, 0, 0,
-            0, 1, 0,
-            0, 0, 1,
-        ];
-    },
-    multiply: function(a, b) {
-        var a00 = a[0 * 3 + 0];
-        var a01 = a[0 * 3 + 1];
-        var a02 = a[0 * 3 + 2];
-        var a10 = a[1 * 3 + 0];
-        var a11 = a[1 * 3 + 1];
-        var a12 = a[1 * 3 + 2];
-        var a20 = a[2 * 3 + 0];
-        var a21 = a[2 * 3 + 1];
-        var a22 = a[2 * 3 + 2];
-        var b00 = b[0 * 3 + 0];
-        var b01 = b[0 * 3 + 1];
-        var b02 = b[0 * 3 + 2];
-        var b10 = b[1 * 3 + 0];
-        var b11 = b[1 * 3 + 1];
-        var b12 = b[1 * 3 + 2];
-        var b20 = b[2 * 3 + 0];
-        var b21 = b[2 * 3 + 1];
-        var b22 = b[2 * 3 + 2];
-
-        return [
-            b00 * a00 + b01 * a10 + b02 * a20,
-            b00 * a01 + b01 * a11 + b02 * a21,
-            b00 * a02 + b01 * a12 + b02 * a22,
-            b10 * a00 + b11 * a10 + b12 * a20,
-            b10 * a01 + b11 * a11 + b12 * a21,
-            b10 * a02 + b11 * a12 + b12 * a22,
-            b20 * a00 + b21 * a10 + b22 * a20,
-            b20 * a01 + b21 * a11 + b22 * a21,
-            b20 * a02 + b21 * a12 + b22 * a22,
-        ];
-    },
-    translation: function(tx, ty) {
-        return [
-            1, 0, 0,
-            0, 1, 0,
-            tx, ty, 1,
-        ];
-    },
-    rotation: function(angleInRadians) {
-        var c = Math.cos(angleInRadians);
-        var s = Math.sin(angleInRadians);
-        return [
-            c,-s, 0,
-            s, c, 0,
-            0, 0, 1,
-        ];
-    },
-    scaling: function(sx, sy) {
-        return [
-            sx, 0, 0,
-            0, sy, 0,
-            0, 0, 1,
-        ];
-    },
-    //NEW
-
-    projection: function(w, h) {
-        return [
-            2 / w, 0, 0,
-            0, -2 / h, 0,
-            -1, 1, 1
-        ];
-    },
-
-    //
-};
-let program;
-let gl;
-let translation = [100, 50];
-let rotationAngle = 0;
-let scale = [1, 1];
-let color;
-
-
-let positionLocation;
-let colorLocation;
-//var resolutionLocation;
-let positionBuffer;
-let matrixLocation;
-
-function fillGeometryCoordinates(gl) {
-    let depth = 10;
-    //TODO
-    function sideRectangle(p1, p2, direction) {
-        let r = [];
-
-        if (direction) {
-            r = [
-                p2[0], p2[1], p2[2],
-                p1[0], p1[1], p1[2],
-                p1[0], p1[1], p1[2] + depth,
-
-                p1[0], p1[1], p1[2] + depth,
-                p2[0], p2[1], p2[2] + depth,
-                p2[0], p2[1], p2[2],
-
-            ];
+    const fragmentShaderCode = `
+        precision mediump float;
+        uniform vec4 u_color;
+        void main(void)
+        {
+            gl_FragColor = u_color;
         }
-        else {
-            r = [
-                p2[0], p2[1], p2[2],
-                p1[0], p1[1], p1[2] + depth,
-                p1[0], p1[1], p1[2],
+        `;
 
-                p1[0], p1[1], p1[2] + depth,
-                p2[0], p2[1], p2[2],
-                p2[0], p2[1], p2[2] + depth,
+    const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+    gl.shaderSource(fragmentShader, fragmentShaderCode);
+    gl.compileShader(fragmentShader);
 
-            ];
-
-        }
-        return r;
-    }
-    //TODO
-    function getRectanglePoints(x, y, z, w, h, direction) {
-        let r = [];
-        if (direction) {
-            r = [
-                x, y, z,
-                x, y + h, z,
-                x + w, y, z,
-                x + w, y, z,
-                x, y + h, z,
-                x + w, y + h, z,
-            ]
-
-        } else {
-            r = [
-                x, y, z,
-                x + w, y, z,
-                x, y + h, z,
-                x + w, y, z,
-                x + w, y + h, z,
-                x, y + h, z,
-            ]
-
-        }
-
-        return r;
-    }
-
-
-    gl.bufferData(
-        gl.ARRAY_BUFFER,
-        new Float32Array([
-            ...getRectanglePoints(0, 0, 0, 50, 10, true),
-            ...getRectanglePoints(20, 10, 0, 10, 40, true),
-            ...getRectanglePoints(0, 0, depth, 50, 10, false),
-            ...getRectanglePoints(20, 10, depth, 10, 40, false),
-
-            ...sideRectangle([0, 0, 0], [0, 10, 0], true),
-            ...sideRectangle([50, 0, 0], [50, 10, 0], false),
-            ...sideRectangle([20, 10, 0], [20, 10 + 40, 0], true),
-            ...sideRectangle([20 + 10, 10, 0], [20 + 10, 10 + 40, 0], false),
-
-            ...sideRectangle([0, 0, 0], [50, 0, 0], false),
-
-            ...sideRectangle([0, 10, 0], [20, 10, 0], true),
-            ...sideRectangle([30, 10, 0], [50, 10, 0], true),
-
-            //...sideRectangle([20, 10, 0], [30, 10, 0], false),
-            ...sideRectangle([20, 50, 0], [30, 50, 0], true),
-
-
-        ]),
-        gl.STATIC_DRAW);
+    const shaderProgram = gl.createProgram();
+    gl.attachShader(shaderProgram, vertexShader);
+    gl.attachShader(shaderProgram, fragmentShader);
+    gl.linkProgram(shaderProgram);
+    gl.useProgram(shaderProgram);
+    return shaderProgram;
 }
 
-function updateScene() {
-    webglUtils.resizeCanvasToDisplaySize(gl.canvas);
-    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.useProgram(program);
-    gl.enableVertexAttribArray(positionLocation);
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+function colorToRGB(color)
+{
+    let map = new Map();
 
-    var size = 2;          // 2 elements par iteration
-    var type = gl.FLOAT;   // type
-    var normalize = false; // pas de normalisation de vecteur
-    var stride = 0;        // 0 de décalage entre composants
-    var offset = 0;        // 0 décalage de départ
-    gl.vertexAttribPointer(
-        positionLocation, size, type, normalize, stride, offset
+    map.set("orange",   [255.0,165.0,0.0,1.0]);
+    map.set("blue",     [0.0,0.0,255.0,1.0]);
+    map.set("red",      [255.0,0.0,0.0,1.0]);
+    map.set("#E1ABAE",  [225.0,171.0,174.0, 1.0]);
+
+    return map.get(color);
+}
+
+function drawRectangle(gl, shaderProgram, x, y, width, height, color)
+{
+    const normalizedX = (x / gl.canvas.width );
+    const normalizedY = -(y / gl.canvas.height);
+    const normalizedWidth = (width / gl.canvas.width) ;
+    const normalizedHeight = -(height / gl.canvas.height);
+
+    let vertices = new Float32Array(
+        [
+            2*normalizedX-0.55, 2*normalizedY+0.9,
+            2*(normalizedX + normalizedWidth)-0.55, 2*normalizedY+0.9,
+            2*normalizedX-0.55, 2*(normalizedY + normalizedHeight)+0.9,
+            2*(normalizedX + normalizedWidth)-0.55, 2*normalizedY+0.9,
+            2*normalizedX-0.55, 2*(normalizedY + normalizedHeight)+0.9,
+            2*(normalizedX + normalizedWidth)-0.55, 2*(normalizedY + normalizedHeight)+0.9
+        ]
     );
-    // set the color
-    gl.uniform4fv(colorLocation, color);
 
+    const vertexBuffer = gl.createBuffer();
 
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+    gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
-    // Compute the matrices
-    let translationMatrix = m3.translation(translation[0], translation[1]);
-    let angleInRadians = -rotationAngle * Math.PI / 180 ;
-    let rotationMatrix = m3.rotation(angleInRadians);
-    let scaleMatrix = m3.scaling(scale[0], scale[1]);
-    //----
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
 
-    // Multiply the matrices.
+    const coord = gl.getAttribLocation(shaderProgram, "coordinates");
+    const colorLocation = gl.getUniformLocation(shaderProgram, "u_color");
+    let rgbColor = colorToRGB(color);
 
-    //NEW
-    let matrix = m3.identity();
-    //New: on commence par multiplier la matrice de project
-    // elle sera donc la dernière transformation à se réaliser
-    matrix = m3.multiply(matrix, translationMatrix);
-    matrix = m3.multiply(matrix, rotationMatrix);
-    matrix = m3.multiply(matrix, scaleMatrix);
-    //----
+    gl.uniform4f(colorLocation, rgbColor[0], rgbColor[1], rgbColor[2], rgbColor[3]);
+    gl.vertexAttribPointer(coord, 2, gl.FLOAT, false, 0, 0);
 
-    //
-    gl.uniformMatrix3fv(matrixLocation, false, matrix);
-
-
-
-    //
-    let primitiveType = gl.TRIANGLES;
-    offset = 0;
-    let count = 12;
-    gl.drawArrays(primitiveType, offset, count);
+    gl.enableVertexAttribArray(coord);
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
 }
 
-function setupGL() {
-    // Shader sources
-    let vertexShaderSource = `
-                attribute vec2 a_position;
-                uniform mat3 u_matrix;
-                void main() {
-                // Transformation & Project
-                    vec2 position = (u_matrix * vec3(a_position, 1)).xy;
-                    gl_Position = vec4(position, 0, 1);
-                //---
-                }
-            `;
-
-    let fragmentShaderSource = `
-                precision mediump float;
-                uniform vec4 u_color;
-                void main() {
-                    gl_FragColor = u_color;
-                }
-            `;
-
-    // Compile shader
-    function compileShader(source, type) {
-        let shader = gl.createShader(type);
-        gl.shaderSource(shader, source);
-        gl.compileShader(shader);
-        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-            console.error('Erreur de compilation du shader: ' + gl.getShaderInfoLog(shader));
-            gl.deleteShader(shader);
-            return null;
-        }
-        return shader;
-    }
-
-    let vertexShader = compileShader(vertexShaderSource, gl.VERTEX_SHADER);
-    let fragmentShader = compileShader(fragmentShaderSource, gl.FRAGMENT_SHADER);
-
-    // Link shaders into a program
-    program = gl.createProgram();
-    gl.attachShader(program, vertexShader);
-    gl.attachShader(program, fragmentShader);
-    gl.linkProgram(program);
-    //
-    positionLocation = gl.getAttribLocation(program, "a_position");
-    colorLocation = gl.getUniformLocation(program, "u_color");
-
-    matrixLocation = gl.getUniformLocation(program, "u_matrix");
-
-    color = [Math.random(), Math.random(), Math.random(), 1];
-
-    positionBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-}
-
-const webGLRenderSystem = (entities, components, webGL) => {
-    gl = webGL;
-    gl.clearColor(0.0, 0.0, 0.0, 0.20);
+const webGLRenderSystem = (entities, components, gl) => {
+    gl.clearColor(0.7, 0.7, 0.7, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
-    program = gl.createProgram();
+    let shaderProgram = setupGL(gl);
 
-    fillGeometryCoordinates(gl, entities, components);
+    for(const entity of entities)
+    {
+        if(components.PositionComponent[entity] && components.GraphicsComponent[entity] && components.RenderableTag[entity])
+        {
+            const position = components.PositionComponent[entity];
+            const graphics = components.GraphicsComponent[entity];
+            
+            var x = position.x;
+            var y = position.y;
+            var width = graphics.shapeInfo.w;
+            var height = graphics.shapeInfo.y;
+            var color = graphics.shapeInfo.color;
 
-    setupGL();
-    updateScene();
+            // Draw the entity as a rectangle
+            drawRectangle(gl, shaderProgram, x, y, width, height, color);
+        }
+    }
 };
 
 export {webGLRenderSystem}
