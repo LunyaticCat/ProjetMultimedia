@@ -73,7 +73,7 @@ function drawRectangle(gl, shaderProgram, x, y, width, height, color)
     const coord = gl.getAttribLocation(shaderProgram, "coordinates");
     const colorLocation = gl.getUniformLocation(shaderProgram, "u_color");
     let rgbColor = colorToRGB(color);
-
+    
     gl.uniform4f(colorLocation, rgbColor[0], rgbColor[1], rgbColor[2], rgbColor[3]);
     gl.vertexAttribPointer(coord, 2, gl.FLOAT, false, 0, 0);
 
@@ -96,7 +96,7 @@ const webGLRenderSystem = (entities, components, gl) => {
             var x = position.x;
             var y = position.y;
             var width = graphics.shapeInfo.w;
-            var height = graphics.shapeInfo.y;
+            var height = graphics.shapeInfo.h;
             var color = graphics.shapeInfo.color;
 
             // Draw the entity as a rectangle
