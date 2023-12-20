@@ -1,6 +1,11 @@
 let stepper = 10;
 let stepperColor;
 
+var coord; // Coordonnées, liées au vertexShader de WebGL.
+var matrixLocation; // Matrice, liée au vertexShader de WebGL.
+var colorLocation; // Couleur, liée au fragmentShader de WebGL.
+
+// Définitions des matrices 3x3 de transformations utilisées.
 const m3 = {
     identity: function ()
     {
@@ -51,6 +56,11 @@ function setupGL(gl)
     gl.linkProgram(shaderProgram);
     gl.useProgram(shaderProgram);
     
+    // Liaison des coordonnées, de la matrice et de la couleur aux variables globales définies au début du fichier.
+    coord = gl.getAttribLocation(shaderProgram, "coordinates");
+    matrixLocation = gl.getUniformLocation(shaderProgram, "u_matrix");
+    colorLocation = gl.getUniformLocation(shaderProgram, "u_color");
+    
     return shaderProgram;
 }
 
@@ -68,9 +78,9 @@ function colorToRGB(color)
         return stepperColor;
     }
 
-    const r = parseInt(color.slice(1, 3), 16)/255;
-    const g = parseInt(color.slice(3, 5), 16)/255;
-    const b = parseInt(color.slice(5, 7), 16)/255;
+    const r = parseInt(color.slice(1, 3), 16) / 255;
+    const g = parseInt(color.slice(3, 5), 16) / 255;
+    const b = parseInt(color.slice(5, 7), 16) / 255;
 
     return [r, g, b, 1];
 }
@@ -84,12 +94,12 @@ function drawRectangle(gl, x, y, width, height, color, shaderProgram)
 
     let vertices = new Float32Array(
         [
-            2*normalizedX-0.55, 2*normalizedY+0.9,
-            2*(normalizedX + normalizedWidth)-0.55, 2*normalizedY+0.9,
-            2*normalizedX-0.55, 2*(normalizedY + normalizedHeight)+0.9,
-            2*(normalizedX + normalizedWidth)-0.55, 2*normalizedY+0.9,
-            2*normalizedX-0.55, 2*(normalizedY + normalizedHeight)+0.9,
-            2*(normalizedX + normalizedWidth)-0.55, 2*(normalizedY + normalizedHeight)+0.9
+            2 * normalizedX - 0.55, 2 * normalizedY + 0.9,
+            2 * (normalizedX + normalizedWidth) - 0.55, 2 * normalizedY + 0.9,
+            2 * normalizedX - 0.55, 2 * (normalizedY + normalizedHeight) + 0.9,
+            2 * (normalizedX + normalizedWidth) - 0.55, 2 * normalizedY + 0.9,
+            2 * normalizedX - 0.55, 2 * (normalizedY + normalizedHeight) + 0.9,
+            2 * (normalizedX + normalizedWidth) - 0.55, 2 * (normalizedY + normalizedHeight) + 0.9
         ]
     );
 
@@ -97,9 +107,6 @@ function drawRectangle(gl, x, y, width, height, color, shaderProgram)
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
 
-    const coord = gl.getAttribLocation(shaderProgram, "coordinates");
-    const matrixLocation = gl.getUniformLocation(shaderProgram, "u_matrix");
-    const colorLocation = gl.getUniformLocation(shaderProgram, "u_color");
     let rgbColor = colorToRGB(color);
 
     //TODO ajouter deformations ici
