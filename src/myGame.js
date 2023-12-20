@@ -43,7 +43,7 @@ window.onload = function ()
     engine.ecs.eventEmitter.on( 'hit', handleHit);
     engine.ecs.eventEmitter.on( 'gameover', handleGameover);
     engine.ecs.eventEmitter.on('looseLife', handleLooseLife)
-    
+    engine.ecs.playSound('src/Sounds/bgMusic.ogg');
     engine.update();
 }
 

@@ -71,6 +71,11 @@ class ECS {
         this.isRunning = true;
     }
 
+    playSound(audioString, isSFX = true) {
+        let audio = new Audio(audioString);
+        audio.play();
+    }
+
     createEntity() {
         const entity = Symbol(generateUUID());
         this.entities.add(entity);

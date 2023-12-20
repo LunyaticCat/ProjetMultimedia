@@ -1,5 +1,6 @@
 import * as cpn from "../components.js";
-
+import {RaquetteTag} from "../components.js";
+var audio = new Audio('audio_file.mp3');
 
 function collision(components, obj1, obj2) {
     // Simple AABB collision detection
@@ -48,15 +49,19 @@ const collisionSystem = (entities, components,ecs) => {
                             components.VelocityComponent[ball].dy = -components.VelocityComponent[ball].dy ; 
                         }
                         if(components.BriqueTag[obj]){
+                            ecs.playSound('src/Sounds/brickhit.mp3');
                             ecs.removeEntity(obj);
                             ecs.eventEmitter.emit('hit');
                         }
-                        if(components.DyingSideComponent[obj] && components.DyingSideComponent[obj].isHitable){
-                            
-                            ecs.eventEmitter.emit('looseLife')
-                            
+                        if(components.RaquetteTag[obj]){
+                            ecs.playSound('src/Sounds/wall.mp3');
                         }
-                        
+                        if(components.DyingSideComponent[obj] && components.DyingSideComponent[obj].isHitable){
+                            ecs.playSound('src/Sounds/hurt.mp3');
+                            ecs.eventEmitter.emit('looseLife')
+                        } else if(components.MurTag[obj]){
+                            ecs.playSound('src/Sounds/wall.mp3');
+                        }
                     }
                 }
             }
