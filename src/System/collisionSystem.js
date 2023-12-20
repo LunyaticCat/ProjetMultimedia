@@ -1,6 +1,5 @@
 import * as cpn from "../components.js";
 import {RaquetteTag} from "../components.js";
-var audio = new Audio('audio_file.mp3');
 
 function collision(components, obj1, obj2) {
     // Simple AABB collision detection
