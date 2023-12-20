@@ -8,7 +8,7 @@ const GraphicsComponent = (shape, shapeInfo) => ({ name: 'GraphicsComponent', sh
 const LifeComponent = (maxLife) => ({ name: "LifeComponent", maxLife, life });
 const ScoreComponent = () => ({ name: "ScoreComponent", socre: 0 });
 
-const GameStateComponent = (state) => ({ name: "GameStateComponent", state:'running', hits:0, leftControl: false, rightControl: false });
+const GameStateComponent = (state) => ({ name: "GameStateComponent", state:'running', hits:0, leftControl: false, rightControl: false, life:3 });
 
 const CollisionBoxComponent = (width, height) => ({ name: 'CollisionBoxComponent', width, height , hit:false});
 const VelocityComponent = (dx, dy) => ({ name: 'VelocityComponent', dx, dy });

@@ -6,6 +6,8 @@ const hudSystem = (entities, components, root) => {
         {
             let hits = components.GameStateComponent[stateEntity].hits ;
             let score = hits * 10 ; 
+            let life = components.GameStateComponent[stateEntity].life ;
+
             if(components.GameStateComponent[stateEntity].state == 'running')
             {
             root.innerHTML = '<div id="gameHUD"> <div id="score"> Score :  '+ score +'</div> </div>';
@@ -13,8 +15,8 @@ const hudSystem = (entities, components, root) => {
             else if(components.GameStateComponent[stateEntity].state == 'gameover')
             {
             root.innerHTML = '<div id="gameHUD"> <div id="score"> Score :  '+ score +'</div> <div id="gameOver" >Game Over</div></div>';
-                
             }
+            root.innerHTML += '<div id="life"> <div id="life"> Life :  '+ life +'</div> </div>';
         }
     }
 };

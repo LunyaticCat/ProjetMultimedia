@@ -36,12 +36,13 @@ window.onload = function ()
     sceneSetup();
 
 
-    engine.ecs.eventEmitter.on( 'leftDown', handleLeftDown)
-    engine.ecs.eventEmitter.on( 'leftUp', handleLeftUp)
-    engine.ecs.eventEmitter.on( 'rightDown', handleRightDown)
-    engine.ecs.eventEmitter.on( 'rightUp', handleRightUp)
-    engine.ecs.eventEmitter.on( 'hit', handleHit)
-    engine.ecs.eventEmitter.on( 'gameover', handleGameover)
+    engine.ecs.eventEmitter.on( 'leftDown', handleLeftDown);
+    engine.ecs.eventEmitter.on( 'leftUp', handleLeftUp);
+    engine.ecs.eventEmitter.on( 'rightDown', handleRightDown);
+    engine.ecs.eventEmitter.on( 'rightUp', handleRightUp);
+    engine.ecs.eventEmitter.on( 'hit', handleHit);
+    engine.ecs.eventEmitter.on( 'gameover', handleGameover);
+    engine.ecs.eventEmitter.on('looseLife', handleLooseLife)
     
     engine.update();
 }
@@ -55,6 +56,15 @@ function handleHit(event)
 
     }
 }
+
+function handleLooseLife(event)
+{
+    for (const state of Object.getOwnPropertySymbols(engine.ecs.components[cpn.GameStateComponent.name]))
+    {
+        engine.ecs.components.GameStateComponent[state].life -= 1;
+    }
+}
+
 
 function handleGameover(event)
 {

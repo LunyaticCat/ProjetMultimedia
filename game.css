@@ -7,6 +7,17 @@
     color: rgb(83, 10, 10);
     font-family: 'Arial', sans-serif;
 }
+#life {
+    position: absolute;
+    top: 220px;
+    left: 5px;
+    z-index: 100;
+    width: 100px;
+    /* Assurez-vous que le HUD est au-dessus des autres éléments du jeu */
+    color: rgb(83, 10, 10);
+    font-family: 'Arial', sans-serif;
+    font-size: 24px;
+}
 
 #score {
     font-size: 24px;
