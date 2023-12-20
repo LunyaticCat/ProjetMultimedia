@@ -71,8 +71,9 @@ class ECS {
         this.isRunning = true;
     }
 
-    playSound(audioString) {
+    playSound(audioString, isSFX = true) {
         let audio = new Audio(audioString);
+        if (!isSFX) audio.loop = true;
         audio.play();
     }
 
