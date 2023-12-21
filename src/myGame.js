@@ -21,8 +21,8 @@ function sceneSetup() {
     for (let i = 0; i < 5; i++)
         for (let j = 0; j < 5; j++) {
             let br;
-            if ((j===2 && i === 0) || (i === 4 && j === 2))  br = entitites.PiercingBuffBrick(offsetx + i * deltax, offsety + j * deltay, 20, 15);
-            else if (j === 1 && i === 1) br = entitites.HypnoticBuffBrick(offsetx + i * deltax, offsety + j * deltay, 20, 15);
+            if ((j===0 && i === 0) || (i === 4 && j === 0))  br = entitites.PiercingBuffBrick(offsetx + i * deltax, offsety + j * deltay, 20, 15);
+            else if (j % 2 && i === 2) br = entitites.HypnoticBuffBrick(offsetx + i * deltax, offsety + j * deltay, 20, 15);
             else br = entitites.Brick(offsetx + i * deltax, offsety + j * deltay, 20, 15);
         }
 

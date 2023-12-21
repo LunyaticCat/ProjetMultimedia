@@ -49,6 +49,7 @@ function Paddle(x, y, w, h) {
     engine.ecs.addComponent(gameObj1, engine.components.GraphicsComponent("rectangle", { w: w, h: h, color: '#834141' }));
     engine.ecs.addComponent(gameObj1, engine.components.CollisionTag());
     engine.ecs.addComponent(gameObj1, engine.components.CollisionBoxComponent(w, h));
+    engine.ecs.addComponent(gameObj1, engine.components.TransformationComponent([1, 1], 0, [0, 0]));
     return gameObj1;
 
 }

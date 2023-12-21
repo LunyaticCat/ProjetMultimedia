@@ -1,5 +1,8 @@
+import {HypnoticTag} from "../components";
+
 let stepper = 10;
 let stepperColor;
+let angleFunny = 0;
 
 var coord; // Coordonnées, liées au vertexShader de WebGL.
 var matrixLocation; // Matrice, liée au vertexShader de WebGL.
@@ -150,7 +153,7 @@ function colorToRGB(color)
     return [r, g, b, 1];
 }
 
-function drawRectangle(gl, x, y, width, height, color, shaderProgram, transformation)
+function drawRectangle(gl, x, y, width, height, color, shaderProgram, transformation, isFunny=false)
 {
     const normalizedX = (x / gl.canvas.width );
     const normalizedY = -(y / gl.canvas.height);
@@ -173,16 +176,23 @@ function drawRectangle(gl, x, y, width, height, color, shaderProgram, transforma
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
 
     let rgbColor = colorToRGB(color);
+    let rotationAngle = 0;
+    if(isFunny) {
+        rotationAngle = angleFunny;
+        angleFunny++;
+        angleFunny = angleFunny%360;
+    }
 
     let translation = [0, 0];
-    let rotationAngle = 0;
+
+
     let scale = [1, 1];
 
-    if (typeof transformation !== 'undefined') {
-        translation = transformation.translation;
-        rotationAngle = transformation.rotate;
-        scale = transformation.homothety;
-    }
+    // if (typeof transformation !== 'undefined') {
+    //     translation = transformation.translation;
+    //     rotationAngle = transformation.rotate;
+    //     scale = transformation.homothety;
+    // }
 
     let translationMatrix = m3.translation(translation[0], translation[1]);
     let angleInRadians = -rotationAngle * Math.PI / 180 ;
@@ -196,10 +206,10 @@ function drawRectangle(gl, x, y, width, height, color, shaderProgram, transforma
     let matrix = m3.identity();
 
     matrix = m3.multiply(matrix, translationMatrix);
-    matrix = m3.multiply(matrix, translateToZero);
+    // matrix = m3.multiply(matrix, translateToZero);
     matrix = m3.multiply(matrix, rotationMatrix);
     matrix = m3.multiply(matrix, scaleMatrix);
-    matrix = m3.multiply(matrix, translateToCoord);
+    // matrix = m3.multiply(matrix, translateToCoord);
 
     gl.uniformMatrix3fv(matrixLocation, false, matrix);
 
@@ -224,9 +234,9 @@ const webGLRenderSystem = (entities, components, gl) => {
 
             let transformation
             if (components.TransformationComponent[entity]) transformation = components.TransformationComponent[entity];
-
+            let isFunny = components.HypnoticTag[entity];
             // Draw the entity as a rectangle
-            drawRectangle(gl, position.x, position.y, graphics.shapeInfo.w, graphics.shapeInfo.h, graphics.shapeInfo.color, shaderProgram, transformation);
+            drawRectangle(gl, position.x, position.y, graphics.shapeInfo.w, graphics.shapeInfo.h, graphics.shapeInfo.color, shaderProgram, transformation, isFunny);
         }
     }
 };
