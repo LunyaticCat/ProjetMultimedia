@@ -26,4 +26,4 @@ const DyingSideComponent = (isHitable) => ({ name: 'DyingSideComponent', isHitab
 
 export { MurTag, BriqueTag, RaquetteTag, BallTag, PositionComponent, CollisionBoxComponent, VelocityComponent, 
     PhysicsTag, CollisionTag, RenderableTag, GraphicsComponent, LifeComponent, ScoreComponent, GameStateComponent,
-    DyingSideComponent }
+    DyingSideComponent, TransformationComponent }
