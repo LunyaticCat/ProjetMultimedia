@@ -150,7 +150,7 @@ function colorToRGB(color)
     return [r, g, b, 1];
 }
 
-function drawRectangle(gl, x, y, width, height, color, shaderProgram)
+function drawRectangle(gl, x, y, width, height, color, shaderProgram, transformation)
 {
     const normalizedX = (x / gl.canvas.width );
     const normalizedY = -(y / gl.canvas.height);
@@ -174,22 +174,32 @@ function drawRectangle(gl, x, y, width, height, color, shaderProgram)
 
     let rgbColor = colorToRGB(color);
 
-    //TODO implementé les variables du système ici
     let translation = [0, 0];
     let rotationAngle = 0;
     let scale = [1, 1];
-    //
+
+    if (typeof transformation !== 'undefined') {
+        translation = transformation.translation;
+        rotationAngle = transformation.rotate;
+        scale = transformation.homothety;
+    }
 
     let translationMatrix = m3.translation(translation[0], translation[1]);
     let angleInRadians = -rotationAngle * Math.PI / 180 ;
+    //Pour la rotation et l'homothetie il faut revenir à l'origine avant la transformation
+    let translateToZero = m3.translation(-x, -y);
     let rotationMatrix = m3.rotation(angleInRadians);
+    let translateToCoord = m3.translation(x, y);
+
     let scaleMatrix = m3.scaling(scale[0], scale[1]);
 
     let matrix = m3.identity();
 
     matrix = m3.multiply(matrix, translationMatrix);
+    matrix = m3.multiply(matrix, translateToZero);
     matrix = m3.multiply(matrix, rotationMatrix);
     matrix = m3.multiply(matrix, scaleMatrix);
+    matrix = m3.multiply(matrix, translateToCoord);
 
     gl.uniformMatrix3fv(matrixLocation, false, matrix);
 
@@ -211,9 +221,12 @@ const webGLRenderSystem = (entities, components, gl) => {
         {
             const position = components.PositionComponent[entity];
             const graphics = components.GraphicsComponent[entity];
-            
+
+            let transformation
+            if (components.TransformationComponent[entity]) transformation = components.TransformationComponent[entity];
+
             // Draw the entity as a rectangle
-            drawRectangle(gl, position.x, position.y, graphics.shapeInfo.w, graphics.shapeInfo.h, graphics.shapeInfo.color, shaderProgram);
+            drawRectangle(gl, position.x, position.y, graphics.shapeInfo.w, graphics.shapeInfo.h, graphics.shapeInfo.color, shaderProgram, transformation);
         }
     }
 };

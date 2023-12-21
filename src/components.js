@@ -12,7 +12,7 @@ const GameStateComponent = (state) => ({ name: "GameStateComponent", state:'runn
 
 const CollisionBoxComponent = (width, height) => ({ name: 'CollisionBoxComponent', width, height , hit:false});
 const VelocityComponent = (dx, dy) => ({ name: 'VelocityComponent', dx, dy });
-const TransformationComponent = (scale=[0, 0], angle=0, vector=[0, 0]) => ({name: 'TransformationComponent', homothety:scale, rotate: angle, translation: vector});
+const TransformationComponent = (homothety=[1, 1], rotate=0, translation=[0, 0]) => ({name: 'TransformationComponent', homothety, rotate, translation});
 
 const PhysicsTag = () => ({ name: 'PhysicsTag' });
 const CollisionTag = () => ({ name: 'CollisionTag' });

@@ -25,7 +25,7 @@ function Ball(x, y, w, h, dx = 0, dy = 0) {
     engine.ecs.addComponent(gameObj1, engine.components.GraphicsComponent("rectangle", { w: w, h: h, color: 'random' }));
     engine.ecs.addComponent(gameObj1, engine.components.CollisionTag());
     engine.ecs.addComponent(gameObj1, engine.components.CollisionBoxComponent(w*.9, h*.9));
-    engine.ecs.addComponent(gameObj1, engine.components.TransformationComponent([0, 0], 0, [0, 0]));
+    engine.ecs.addComponent(gameObj1, engine.components.TransformationComponent([1, 1], 0, [0, 0]));
     return gameObj1;
 }
 
