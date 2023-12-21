@@ -72,6 +72,7 @@ function Brick(x, y, w, h) {
     engine.ecs.addComponent(gameObj1, engine.components.GraphicsComponent("rectangle", { w: w, h: h, color: '#5e1f7e' }));
     engine.ecs.addComponent(gameObj1, engine.components.CollisionTag());
     engine.ecs.addComponent(gameObj1, engine.components.CollisionBoxComponent(w, h));
+    engine.ecs.addComponent(gameObj1, engine.components.TransformationComponent())
     return gameObj1;
 
 }
