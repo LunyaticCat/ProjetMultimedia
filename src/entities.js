@@ -72,9 +72,23 @@ function Brick(x, y, w, h) {
     engine.ecs.addComponent(gameObj1, engine.components.GraphicsComponent("rectangle", { w: w, h: h, color: '#5e1f7e' }));
     engine.ecs.addComponent(gameObj1, engine.components.CollisionTag());
     engine.ecs.addComponent(gameObj1, engine.components.CollisionBoxComponent(w, h));
-    engine.ecs.addComponent(gameObj1, engine.components.TransformationComponent())
+    engine.ecs.addComponent(gameObj1, engine.components.TransformationComponent());
     return gameObj1;
 
+}
+
+function PiercingBuffBrick(x, y, w, h) {
+    const gameObj1 = this.Brick(x, y, w, h);
+    engine.ecs.addComponent(gameObj1, engine.components.GraphicsComponent("rectangle", { w: w, h: h, color: '#ffffff' }));
+    engine.ecs.addComponent(gameObj1, engine.components.PiercingTag());
+    return gameObj1;
+}
+
+function HypnoticBuffBrick(x, y, w, h) {
+    const gameObj1 = this.Brick(x, y, w, h);
+    engine.ecs.addComponent(gameObj1, engine.components.GraphicsComponent("rectangle", { w: w, h: h, color: '#000000' }));
+    engine.ecs.addComponent(gameObj1, engine.components.HypnoticTag());
+    return gameObj1;
 }
 
 /**
@@ -111,4 +125,4 @@ function GameState() {
 }
 
 
-export { Ball, Paddle, Brick, Wall , GameState}
+export { Ball, Paddle, Brick, PiercingBuffBrick, HypnoticBuffBrick, Wall , GameState}

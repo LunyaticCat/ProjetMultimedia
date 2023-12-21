@@ -21,9 +21,11 @@ const RenderableTag = () => ({ name: 'RenderableTag' });
 const BallTag = () => ({ name: 'BallTag' });
 const RaquetteTag = () => ({ name: 'RaquetteTag' });
 const BriqueTag = () => ({ name: 'BriqueTag' });
+const PiercingTag = () => ({ name: 'PiercingTag' });
+const HypnoticTag = () => ({ name: 'HypnoticTag' });
 const MurTag = () => ({ name: 'MurTag' });
 const DyingSideComponent = (isHitable) => ({ name: 'DyingSideComponent', isHitable});
 
 export { MurTag, BriqueTag, RaquetteTag, BallTag, PositionComponent, CollisionBoxComponent, VelocityComponent, 
     PhysicsTag, CollisionTag, RenderableTag, GraphicsComponent, LifeComponent, ScoreComponent, GameStateComponent,
-    DyingSideComponent, TransformationComponent }
+    DyingSideComponent, TransformationComponent, PiercingTag, HypnoticTag }

@@ -12,7 +12,6 @@ function sceneSetup() {
     const wall03 = entitites.Wall(0, 0, 350, 5);
     const wall04 = entitites.Wall(0, 350, 350, 5, true);
 
-
     const ball = entitites.Ball(150, 150, 10, 10, 0.1, 0.05);
     const paddle = entitites.Paddle(0, 300, 50, 10);
     let offsetx = 25;
@@ -21,7 +20,10 @@ function sceneSetup() {
     let deltay = 30;
     for (let i = 0; i < 5; i++)
         for (let j = 0; j < 5; j++) {
-            const br = entitites.Brick(offsetx + i * deltax, offsety + j * deltay, 20, 15);
+            let br;
+            if ((j===2 && i === 0) || (i === 4 && j === 2))  br = entitites.PiercingBuffBrick(offsetx + i * deltax, offsety + j * deltay, 20, 15);
+            else if (j === 1 && i === 1) br = entitites.HypnoticBuffBrick(offsetx + i * deltax, offsety + j * deltay, 20, 15);
+            else br = entitites.Brick(offsetx + i * deltax, offsety + j * deltay, 20, 15);
         }
 
     

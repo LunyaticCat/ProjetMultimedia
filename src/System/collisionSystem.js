@@ -1,6 +1,8 @@
 import * as cpn from "../components.js";
 import {RaquetteTag} from "../components.js";
 
+let piercingBuff = false;
+
 function collision(components, obj1, obj2) {
     // Simple AABB collision detection
     if (components.PositionComponent[obj1].x + components.CollisionBoxComponent[obj1].width > components.PositionComponent[obj2].x &&
@@ -29,7 +31,7 @@ const collisionSystem = (entities, components,ecs) => {
         {
             for (const obj of Object.getOwnPropertySymbols(components[cpn.CollisionTag.name])) {
                 components.CollisionBoxComponent[obj].hit = false;
-
+                
                 if (ball != obj) {
                     if (collision(components, ball, obj)) {
                         components.CollisionBoxComponent[obj].hit = true;
@@ -39,13 +41,18 @@ const collisionSystem = (entities, components,ecs) => {
                         let otherobj = {x:components.PositionComponent[obj].x ,y:components.PositionComponent[obj].y,width : components.CollisionBoxComponent[obj].width,height : components.CollisionBoxComponent[obj].height}
                         let axe = detectCollisionAxis(ballobj, otherobj)
 
-                        if(axe == 'X')
-                        {
-                            components.VelocityComponent[ball].dx = -components.VelocityComponent[ball].dx ; 
+                        if(!components.BriqueTag[obj] || !piercingBuff) {
+                            if(axe == 'X') 
+                            {
+                                components.VelocityComponent[ball].dx = -components.VelocityComponent[ball].dx ; 
+                            }
+                            else
+                            {
+                                components.VelocityComponent[ball].dy = -components.VelocityComponent[ball].dy ; 
+                            }
                         }
-                        else
-                        {
-                            components.VelocityComponent[ball].dy = -components.VelocityComponent[ball].dy ; 
+                        if (components.PiercingTag[obj]) {
+                            piercingBuff = true;
                         }
                         if(components.BriqueTag[obj]){
                             ecs.playSound('src/Sounds/brickhit.mp3');
